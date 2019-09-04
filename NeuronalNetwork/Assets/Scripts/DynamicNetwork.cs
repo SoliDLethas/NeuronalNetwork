@@ -684,7 +684,7 @@ namespace NNDynamic
         public float value = 0;
         public float lastSum = 0;
         readonly public List<Connection> connections = new List<Connection>();
-        private readonly IActivationFunction activationFunction = new Sigmoid();
+        private readonly IActivationFunction activationFunction = new Boolean();
         public override float GetValue()
         {
             float sum = 0;
