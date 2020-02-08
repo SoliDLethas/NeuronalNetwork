@@ -19,7 +19,7 @@ public class VisualNetworkDynamic : MonoBehaviour
     List<WorkingNeuron> outputNeurons = new List<WorkingNeuron>();
 
     float lastTimeDrawing;
-    readonly float durationUntilDrawing = 1f;
+    readonly float durationUntilDrawing = 6f;
 
     private GlobalData globalData;
 
@@ -74,6 +74,7 @@ public class VisualNetworkDynamic : MonoBehaviour
             vis_Neuron.GetComponent<VisualNeuronDynamic>().neuron = inputNeuron;
             vis_Neuron.GetComponent<VisualNeuronDynamic>().vn = this;
             vis_Neuron.transform.parent = GameObject.Find("vis_Neurons").transform;
+            vis_Neuron.name = "vis_Neuron_" + inputNeuron.position.x + "_" + inputNeuron.position.y;
             vis_neurons.Add(vis_Neuron);
         }
 
@@ -85,6 +86,7 @@ public class VisualNetworkDynamic : MonoBehaviour
             vis_Neuron.GetComponent<VisualNeuronDynamic>().neuron = hiddenNeuron;
             vis_Neuron.GetComponent<VisualNeuronDynamic>().vn = this;
             vis_Neuron.transform.parent = GameObject.Find("vis_Neurons").transform;
+            vis_Neuron.name = "vis_Neuron_" + hiddenNeuron.position.x + "_" + hiddenNeuron.position.y;
             vis_neurons.Add(vis_Neuron);
         }
 
@@ -96,6 +98,7 @@ public class VisualNetworkDynamic : MonoBehaviour
             vis_Neuron.GetComponent<VisualNeuronDynamic>().neuron = outputNeuron;
             vis_Neuron.GetComponent<VisualNeuronDynamic>().vn = this;
             vis_Neuron.transform.parent = GameObject.Find("vis_Neurons").transform;
+            vis_Neuron.name = "vis_Neuron_" + outputNeuron.position.x + "_" + outputNeuron.position.y;
             vis_neurons.Add(vis_Neuron);
         }
     }

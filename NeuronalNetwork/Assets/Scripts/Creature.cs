@@ -44,9 +44,9 @@ public class Creature : MonoBehaviour, I_MoveObject, I_RaycastHit, IExchangeNeur
     // Update is called once per frame
     void Update()
     {
-        Starvation();
+        //Starvation();
 
-        GiveBirth();
+        //GiveBirth();
 
         CalculateAge();
     }

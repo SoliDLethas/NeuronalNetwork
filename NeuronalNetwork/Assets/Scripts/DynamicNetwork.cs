@@ -9,12 +9,13 @@ namespace NNDynamic
 
         public NeuronalNetwork parentNetwork;
         public NeuronalNetwork nn;
-
+        private float lastTimeTriggered;
+        private float durationUntilTrigger = 3f;
         private readonly int count_InputNeurons = 12;
         private readonly int count_OuputNeurons = 4;
 
         readonly Vector3 hiddenNetworkSizeMin = new Vector3(1, 0, 0);
-        readonly Vector3 hiddenNetworkSizeMax = new Vector3(1, 11, 0);
+        readonly Vector3 hiddenNetworkSizeMax = new Vector3(3, 20, 0);
         readonly List<Vector3> hiddenNetworkSize = new List<Vector3>();
 
         // Start is called before the first frame update
@@ -42,9 +43,13 @@ namespace NNDynamic
             {
                 //First Spawn(no child)
 
-                //Version1();
+                CreateInputNeurons();
 
-                Version2();
+                CreateOutputNeurons();
+
+                SpawnMassivHiddenNeurons();
+
+                ConnectNeurons();
 
             }
         }
@@ -52,6 +57,14 @@ namespace NNDynamic
         // Update is called once per frame
         void Update()
         {
+            //Timer
+            if ((Time.realtimeSinceStartup - lastTimeTriggered) > durationUntilTrigger)
+            {
+                lastTimeTriggered = Time.realtimeSinceStartup;
+
+                MutateNetwork();
+            }
+
             //Input Neuronen manipulieren
             context.UpdateInputNeurons(nn.GetInputNeurons());
 
@@ -59,41 +72,19 @@ namespace NNDynamic
             context.ReadOutputNeurons(nn.GetOutputNeurons());
         }
 
-        private void Version1()
-        {
-            CreateInputNeurons();
-
-            CreateHiddenNeurons();
-
-            CreateOutputNeurons();
-
-            nn.CreateFullMesh();
-        }
-
-        private void Version2()
-        {
-            CreateInputNeurons();
-
-            CreateOutputNeurons();
-
-            SpawnMassivHiddenNeurons();
-
-            ConnectNeurons();
-        }
-
         private void MutateNetwork()
         {
-            CreateNewHiddenNeurons();
+            //CreateNewHiddenNeurons();
 
-            ConnectNeurons();
+            //ConnectNeurons();
 
-            ChangeWeights();
+            //ChangeWeights();
 
             EnpowerWeights();
 
             DeleteUnusedConnections();
 
-            //DeleteUnusedHiddenNeurons();
+            DeleteUnusedHiddenNeurons();
         }
 
         private void ConnectNeurons()
@@ -193,6 +184,10 @@ namespace NNDynamic
                     if (connection.Weight > -0.01 && connection.Weight < 0.01)
                     {
                         connectionToBeDeleted.Add(connection.Neuron);
+
+                    }else if(connection.Neuron == null)
+                    {
+                        connectionToBeDeleted.Add(connection.Neuron);
                     }
                 }
 
@@ -240,21 +235,31 @@ namespace NNDynamic
             {
                 foreach (Connection connection in workingNeuron.connections)
                 {
-                    if (connection.performanceCalculated)
-                    {
+                    //if (connection.performanceCalculated)
+                    //{
                         float connectionWeight = connection.Weight;
                         float connectionModi = connection.activationWithinDurationAverageValue;
-                        float developRate = 0.3f;
+                        float developRate = 0.1f;
 
                         if (connectionModi <= 0)
                         {
-                            connection.Weight = (connection.Weight * (1 - developRate));
+                            float tmp_Weight = (connection.Weight * (1 - developRate));
+
+                            if(Mathf.Abs(tmp_Weight) <= 1f)
+                            {
+                                connection.Weight = tmp_Weight;
+                            }                        
                         }
                         else if (connectionModi > 0)
                         {
-                            connection.Weight = (connection.Weight * (1 + developRate));
+                            float tmp_Weight = (connection.Weight * (1 + developRate));
+
+                            if (Mathf.Abs(tmp_Weight) <= 1f)
+                            {
+                                connection.Weight = tmp_Weight;
+                            }
                         }
-                    }
+                    //}
                 }
             }
         }
@@ -626,13 +631,13 @@ namespace NNDynamic
 
         public Connection(Neuron neuron, float weight)
         {
-            this.neuron = neuron;
-            this.weight = weight;
+            Neuron = neuron;
+            Weight = weight;
         }
 
         public float GetValue()
         {
-            return neuron.GetValue() * weight;
+            return Neuron.GetValue() * weight;
         }
     }
 

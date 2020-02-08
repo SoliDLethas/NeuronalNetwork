@@ -34,9 +34,11 @@ public class VisualNeuronDynamic : MonoBehaviour
                 gO_line.transform.parent = GameObject.Find("lineRenderer").transform;
                 LineRenderer lineRenderer = gO_line.AddComponent<LineRenderer>();
                 lineRenderer.material = mat_Default;
-                lineRenderer.widthMultiplier = 0.2f;
+                gO_line.AddComponent<vis_Connection>().connection = connection;
+                lineRenderer.widthMultiplier = 0.05f;
                 lineRenderer.SetPosition(0, vn.Start_Position + Vector3.Scale(neuronOrigin.position,globalData.SpaceBetweenNeurons));
                 lineRenderer.SetPosition(1, transform.position);
+                lineRenderer.generateLightingData = true;
                 gOs_LineRenderer.Add(gO_line);
             }
         }
@@ -49,20 +51,30 @@ public class VisualNeuronDynamic : MonoBehaviour
         {
             GetComponent<Renderer>().material = mat_Activated;
 
-            foreach (GameObject line in gOs_LineRenderer)
-            {
-                line.GetComponent<LineRenderer>().material = mat_Activated;
-            }
+            //foreach (GameObject line in gOs_LineRenderer)
+            //{
+            //    line.GetComponent<LineRenderer>().material = mat_Activated;
+            //}
         }
         else
         {
             GetComponent<Renderer>().material = mat_Default;
 
-            foreach (GameObject line in gOs_LineRenderer)
-            {
-                line.GetComponent<LineRenderer>().material = mat_Default;
-            }
+            //foreach (GameObject line in gOs_LineRenderer)
+            //{
+            //    line.GetComponent<LineRenderer>().material = mat_Default;
+            //}
         }
+
+        //foreach (GameObject lr in gOs_LineRenderer)
+        //{
+        //    Connection connection = lr.GetComponent<vis_Connection>().connection;
+        //    LineRenderer lineRenderer = lr.GetComponent<LineRenderer>();
+        //    //Min 0.05f
+        //    //Max 0.5f
+        //    //Mathf.Abs(connection.Weight) / 2
+        //    lineRenderer.widthMultiplier = Mathf.Abs(connection.Weight) / 2;
+        //}
     }
     public void DeleteLineRenderer()
     {

@@ -579,7 +579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 68817596321454371, guid: 20773ee6c2b20e147b32ad8392866dcc, type: 3}
-  maxObjects: 50
+  maxObjects: 1
   spawnBoundariesMin: {x: -48, y: 1.5, z: -48}
   spawnBoundariesMax: {x: 48, y: 1.5, z: 48}
 --- !u!4 &1028392860
@@ -631,6 +631,7 @@ MonoBehaviour:
   oldestCreature_Age: 0
   oldestCreature_Name: 
   oldestCreature_gO: {fileID: 0}
+  overrideOldestCreature: 1
   bornRate: 3
   SpaceBetweenNeurons: {x: 10, y: 5, z: 0}
 --- !u!114 &1028392863
